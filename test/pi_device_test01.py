@@ -1,8 +1,9 @@
-import RPi.GPIO as GPIO
 import time
 import requests
+import sys
 
 flag = True;
+interval_timer = 5;
 
 try:
     while True:
@@ -10,14 +11,18 @@ try:
         if flag == False:
             res = requests.get('http://localhost:5000/btn_status/on', timeout=5)
             #print(res.text)
-            time.sleep(1)
+            time.sleep(interval_timer)
             flag = True
 
-        else if flag == True:
+        elif flag == True:
             res = requests.get('http://localhost:5000/btn_status/off', timeout=5)
             #print(res.text)
-            time.sleep(1)
+            time.sleep(interval_timer)
             flag = False
 
 except KeyboardInterrupt:
-    GPIO.cleanup()
+    print("terminate system")
+    sys.exit()
+
+except Exception as e:
+    print(e)
