@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Horizontal Bar Chart</title>
+	<script src="{{url_for('static', filename = 'js/Chart.min.js')}}"></script>
+	<script src="{{url_for('static', filename = 'js/util.js')}}"></script>
+	<style>
+		#canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+
+		button {
+			font-size: 20px;
+		}
+
+		.btn_person {
+			height: 300px;
+			width: 150px;
+			display: flex;
+			flex-direction: column;
+			/* flex-wrap: wrap; */
+			overflow-y: scroll;
+		}
+
+		.btn_person_child {
+			height: 40px;
+			width: 100px;
+			margin: auto auto;
+		}
+
+		/* ======================================스크롤바 css====================================== */
+		.btn_person::-webkit-scrollbar {
+			width: 10px;
+		}
+
+		.btn_person::-webkit-scrollbar-thumb {
+			background-color: #2f3542;
+			border-radius: 10px;
+			background-clip: padding-box;
+			border: 2px solid transparent;
+		}
+
+		.btn_person::-webkit-scrollbar-track {
+			background-color: grey;
+			border-radius: 10px;
+			box-shadow: inset 0px 0px 5px white;
+		}
+
+		/* ============================================================================================== */
+	</style>
+</head>
+
+<body>
+	<div id="container" style="height:280px">
+		<table style="height:100%">
+			<th style="height:100%">
+				<div class="btn_person">
+					<div class="btn_person_child"><button id="1" onclick="button_click(id)">사람1</button></div>
+					<div class="btn_person_child"><button id="2" onclick="button_click(id)">사람2</button></div>
+					<div class="btn_person_child"><button id="3" onclick="button_click(id)">사람3</button></div>
+					<div class="btn_person_child"><button id="4" onclick="button_click(id)">사람4</button></div>
+					<div class="btn_person_child"><button id="5" onclick="button_click(id)">사람5</button></div>
+					<!-- <div class="btn_person_child"><button id="6" onclick="button_temp(id)">사람6</button></div>
+					<div class="btn_person_child"><button id="7" onclick="button_temp(id)">사람7</button></div>
+					<div class="btn_person_child"><button id="8" onclick="button_temp(id)">사람8</button></div>
+					<div class="btn_person_child"><button id="9" onclick="button_temp(id)">사람9</button></div>
+					<div class="btn_person_child"><button id="10" onclick="button_temp(id)">사람10</button></div> -->
+				</div>
+			</th>
+
+			<th style="width:85%;">
+				<canvas id="canvas"></canvas>
+			</th>
+		</table>
+
+	</div>
+
+	<div>
+		<button id="reload" onclick="reload_click()" style="float:right">새로고침</button>
+	</div>
+
+	<script>
+		function button_click(id) {
+			//console.log(id);
+			myHorizontalBar.data.datasets[Number(id) - 1].data[0]++;
+			myHorizontalBar.update();
+		}
+
+		// function button_temp(id) {
+		// 	myHorizontalBar.data.datasets[Number(id) - 6].data[0]--;
+		// 	myHorizontalBar.update();
+		// }
+
+		function reload_click() {
+			window.location.reload(true);
+		}
+
+		var color = Chart.helpers.color;
+		var horizontalBarChartData = {
+			//labels: ['물 마신 횟수'],
+			datasets: [
+				{
+					label: '사람 1',
+					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+					//borderColor: window.chartColors.red,
+					// borderWidth: 1,
+					data: [0]
+				},
+				{
+					label: '사람 2',
+					backgroundColor: color(window.chartColors.orange).alpha(0.5).rgbString(),
+					//borderColor: window.chartColors.blue,
+					data: [0]
+				},
+				{
+					label: '사람 3',
+					backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
+					//borderColor: window.chartColors.blue,
+					data: [0]
+				},
+				{
+					label: '사람 4',
+					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+					//borderColor: window.chartColors.blue,
+					data: [0]
+				},
+				{
+					label: '사람 5',
+					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+					//borderColor: window.chartColors.blue,
+					data: [0]
+				},
+			]
+
+		};
+
+		window.onload = function () {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myHorizontalBar = new Chart(ctx, {
+				type: 'horizontalBar',
+				data: horizontalBarChartData,
+				options: {
+					elements: {
+						rectangle: {
+							//borderWidth: 2,
+						}
+					},
+					responsive: true,
+					title: {
+						display: true,
+						text: '물 마신 횟수',
+						fontSize: 20,
+					},
+					scales: {
+						xAxes: [{
+							ticks: {
+								beginAtZero: true,
+								//max:100,
+								stepSize: 1,
+							},
+						}]
+					},
+				}
+			});
+
+		};
+
+
+	</script>
+</body>
+
+</html>
