@@ -2,6 +2,7 @@ from flask import Flask, jsonify, render_template
 from flask_cors import CORS,cross_origin
 
 app=Flask(__name__)
+app.config.from_object(__name__)
 CORS(app, support_credentials=True)
 g_btn_status = "None"
 
