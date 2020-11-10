@@ -111,35 +111,48 @@
 		var checked;
 		var checked_button;
 		var checked_id;
+		var data_get = "";
+
+		function blank(){
+
+		}
 
 		function button_click(id) {
 			checked_button = document.getElementById(id);
 			checked = checked_button.checked;
 			checked_id = checked_button.id;
-			//console.log(checked);
+			console.log(checked);
 
 			if (checked == true) {
-				// myHorizontalBar.data.datasets[Number(checked_id) - 1].data[0]++;
-				// myHorizontalBar.update();
-				$.ajax({
-					url: 'http://localhost:5000/polling',
-					data: [],
-					type: 'GET',
-					dataType: 'json',
-				})
-					.done(function (res) {
-						console.log(res);
+				console.log(data_get);
 
-						if (res.polling == "on") {
-							myHorizontalBar.data.datasets[Number(checked_id) - 1].data[0]++;
-							myHorizontalBar.update();
-
-							checked_button.checked=false;
-						}
+				while (data_get != "on") {
+					$.ajax({
+						url: 'http://localhost:5000/polling',
+						data: [],
+						type: 'GET',
+						async: false,
+						dataType: 'json',
 					})
-			}
-			else if (checked == false) {
+						.done(function (res) {
+							console.log(res);
 
+							data_get = res.polling;
+							console.log(data_get);
+
+							checked_button.checked = false;
+						})
+
+					setTimeout(blank(),1000);
+				}
+
+				if (data_get == "on") {
+					myHorizontalBar.data.datasets[Number(checked_id) - 1].data[0]++;
+					myHorizontalBar.update();
+
+					data_get = "off";
+					checked_button.checked = false;
+				}
 			}
 			//console.log(id);
 		}
@@ -227,4 +240,4 @@
 	</script>
 </body>
 
-</html>
+</html>`

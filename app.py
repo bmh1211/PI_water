@@ -26,6 +26,7 @@ def ex():
 @app.route('/polling')
 def polling():
     global g_btn_status
+    print("========== %s" %g_btn_status)
     return jsonify({"polling" : g_btn_status}), 200
 
 
