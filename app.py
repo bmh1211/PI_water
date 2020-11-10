@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template
 
 app=Flask(__name__)
+g_btn_status = "None"
 
 @app.route('/')
 def hello():
@@ -15,5 +16,31 @@ def info():
 def ex():
     return render_template('view.html')
 
-if __name__=="__main__":
-    app.run(debug=True)
+
+#author: hyeok0724.kim@ninewatt.com
+#param: None
+#description: Get btn_value
+@app.route('/polling')
+def polling():
+    global g_btn_status
+    return jsonify({"polling" : g_btn_status}), 200
+
+
+#author: hyeok0724.kim@ninewatt.com
+#param: status
+#ex) on or off
+#description: Get status
+@app.route('/btn_status/<status>')
+def btn_status(status):
+
+    print(status)
+    global g_btn_status
+    g_btn_status = status
+
+    return jsonify({"btn_status" :g_btn_status}), 200
+
+if __name__ == "__main__":
+    app.host = "127.0.0.1"
+    app.port = "5000"
+    app.debug = True
+    app.run()
