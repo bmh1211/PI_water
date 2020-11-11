@@ -1,0 +1,176 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Horizontal Bar Chart</title>
+
+	<link rel="shortcut icon" href="#">
+
+	<script src="{{url_for('static', filename = 'js/Chart.min.js')}}"></script>
+	<script src="{{url_for('static', filename = 'js/util.js')}}"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<style>
+		#canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+
+		.btn_person_child {
+			font-size: 20px;
+            height:50px;
+            width:50px;
+            margin:5px auto;
+		}
+
+		.btn_person {
+			height: 300px;
+			width: 150px;
+			display: flex;
+			flex-direction: column;
+			/* flex-wrap: wrap; */
+			overflow-y: scroll;
+		}
+
+		/* ======================================스크롤바 css====================================== */
+		.btn_person::-webkit-scrollbar {
+			width: 10px;
+		}
+
+		.btn_person::-webkit-scrollbar-thumb {
+			background-color: #2f3542;
+			border-radius: 10px;
+			background-clip: padding-box;
+			border: 2px solid transparent;
+		}
+
+		.btn_person::-webkit-scrollbar-track {
+			background-color: grey;
+			border-radius: 10px;
+			box-shadow: inset 0px 0px 5px white;
+		}
+
+		/* ============================================================================================== */
+	</style>
+</head>
+
+<body>
+	<div id="container" style="height:280px;margin-top:30px">
+		<table style="height:100%">
+			<th style="height:100%">
+				<div class="btn_person">
+					<div><button class="btn_person_child" id="1" onclick="button_click(id)"></div>
+					<div><button class="btn_person_child" id="2" onclick="button_click(id)"></div>
+					<div><button class="btn_person_child" id="3" onclick="button_click(id)"></div>
+					<div><button class="btn_person_child" id="4" onclick="button_click(id)"></div>
+					<div><button class="btn_person_child" id="5" onclick="button_click(id)"></div>
+				</div>
+			</th>
+
+			<th style="width:85%;">
+				<canvas id="canvas"></canvas>
+			</th>
+		</table>
+	</div><br><br>
+
+	<div>
+		<button id="reload" onclick="reload_click()" style="float:right">새로고침</button>
+	</div>
+
+	<script>
+		// ======================================================변수들======================================================//
+		var checked;
+		var checked_button;
+		var checked_id;
+		var data_get = "";
+		var Interval;
+		var isActive = false;
+		var buttons = document.getElementsByClassName("btn_person_child");
+
+		var color = Chart.helpers.color;
+		var horizontalBarChartData = {
+			//labels: ['물 마신 횟수'],
+			datasets: [
+				{
+					label: '사람 1',
+					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+					//borderColor: window.chartColors.red,
+					// borderWidth: 1,
+					data: [0]
+				},
+				{
+					label: '사람 2',
+					backgroundColor: color(window.chartColors.orange).alpha(0.5).rgbString(),
+					//borderColor: window.chartColors.blue,
+					data: [0]
+				},
+				{
+					label: '사람 3',
+					backgroundColor: color(window.chartColors.yellow).alpha(0.5).rgbString(),
+					//borderColor: window.chartColors.blue,
+					data: [0]
+				},
+				{
+					label: '사람 4',
+					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+					//borderColor: window.chartColors.blue,
+					data: [0]
+				},
+				{
+					label: '사람 5',
+					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+					//borderColor: window.chartColors.blue,
+					data: [0]
+				},
+			]
+		};
+
+		// ==========================================================함수들======================================================//
+		// 버튼클릭시
+		function button_click(id) {
+            myHorizontalBar.data.datasets[Number(id) - 1].data[0]++;
+			myHorizontalBar.update();
+		}
+
+		// 새로고침
+		function reload_click() {
+			window.location.reload(true);
+		}
+
+		// =================================================== 페이지 로드 시 상위 기본설정 다 완료하고 마지막에 실행 ===============================//
+		window.onload = function () {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.myHorizontalBar = new Chart(ctx, {
+				type: 'horizontalBar',
+				data: horizontalBarChartData,
+				options: {
+					elements: {
+						rectangle: {
+							//borderWidth: 2,
+						}
+					},
+					responsive: true,
+					title: {
+						display: true,
+						text: '물 마신 횟수 (단위 : 컵)',
+						fontSize: 20,
+					},
+					scales: {
+						xAxes: [{
+							ticks: {
+								beginAtZero: true,
+								//max:100,
+								stepSize: 1,
+							},
+						}]
+					},
+				}
+			});
+
+		};
+
+
+	</script>
+</body>
+
+</html>`

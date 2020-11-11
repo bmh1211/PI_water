@@ -19,6 +19,10 @@ def info():
 def ex():
     return render_template('view.html')
 
+@app.route('/view_easy')
+def ex2():
+    return render_template('view_easy.html')
+
 
 #author: hyeok0724.kim@ninewatt.com
 #param: None
