@@ -182,8 +182,8 @@
 
 						button_on();
 					}
-					else if(data_get=="off"){
-						checked_button.checked=true;
+					else if (data_get == "off") {
+						checked_button.checked = true;
 					}
 				})
 		}
@@ -192,7 +192,7 @@
 		function button_on() {
 			//console.log(data_get + "2");
 
-			isActive=false;
+			isActive = false;
 			//console.log(isActive);
 
 			myHorizontalBar.data.datasets[Number(checked_id) - 1].data[0]++;
@@ -204,14 +204,14 @@
 
 		// 차트의 체크박스가 체크가 되었을 때
 		function button_click(id) {
+			checked_button = document.getElementById(id);
+			checked = checked_button.checked;
+			checked_id = checked_button.id;
+
 			// 어느 체크박스도 선택되어있지 않을 때
 			if (isActive == false) {
 				//console.log(isActive);
 				isActive = true;
-
-				checked_button = document.getElementById(id);
-				checked = checked_button.checked;
-				checked_id = checked_button.id;
 				//console.log(checked);
 
 				// 해당 체크박스의 상태가 체크된 상태일 때 
@@ -227,19 +227,19 @@
 							get_btn_status_apply();
 						}, 1000);
 					}
-					
+
 					// 받아온 정수기 버튼의 상태가 눌린 상태일 때
 					else if (data_get == "on") {
 						button_on();
 					}
 				}
 			}
-			
+
 			// 하나의 체크박스가 선택되어있을 때(다른 체크박스는 선택해도 반응없도록)
-			else if(isActive==true){
-				checked_button.checked=false;
+			else if (isActive == true) {
+				checked_button.checked = false;
 				//console.log(isActive);
-				console.log("지금 눌려있다고 된 버튼 ID"+checked_id);
+				console.log("지금 눌려있다고 된 버튼 ID" + checked_id);
 			}
 			//console.log(id);
 		}
