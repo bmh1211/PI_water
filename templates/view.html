@@ -105,6 +105,7 @@
 		var data_get = "";
 		var Interval;
 		var isActive = false;
+		var buttons = document.getElementsByClassName("btn_person_child");
 
 		var color = Chart.helpers.color;
 		var horizontalBarChartData = {
@@ -199,7 +200,11 @@
 			myHorizontalBar.update();
 
 			data_get = "off";
-			checked_button.checked = false;
+			// checked_button.checked = false;
+
+			for(var i=0;i<buttons.length;i++){
+				buttons.checked=false;
+			}
 		}
 
 		// 차트의 체크박스가 체크가 되었을 때
@@ -237,7 +242,7 @@
 
 			// 하나의 체크박스가 선택되어있을 때(다른 체크박스는 선택해도 반응없도록)
 			else if (isActive == true) {
-				checked_button.checked = false;
+				//checked_button.checked = false;
 				//console.log(isActive);
 				console.log("지금 눌려있다고 된 버튼 ID" + checked_id);
 			}
