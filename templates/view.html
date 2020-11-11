@@ -84,16 +84,6 @@
 							onclick="button_click(id)"></button><label for="4"></label></div>
 					<div><input type="checkbox" class="btn_person_child" id="5"
 							onclick="button_click(id)"></button><label for="5"></label></div>
-					<!-- <div class="btn_person_child"><button id="1" onclick="button_click(id)">사람1</button></div>
-					<div class="btn_person_child"><button id="2" onclick="button_click(id)">사람2</button></div>
-					<div class="btn_person_child"><button id="3" onclick="button_click(id)">사람3</button></div>
-					<div class="btn_person_child"><button id="4" onclick="button_click(id)">사람4</button></div>
-					<div class="btn_person_child"><button id="5" onclick="button_click(id)">사람5</button></div> -->
-					<!-- <div class="btn_person_child"><button id="6" onclick="button_temp(id)">사람6</button></div>
-					<div class="btn_person_child"><button id="7" onclick="button_temp(id)">사람7</button></div>
-					<div class="btn_person_child"><button id="8" onclick="button_temp(id)">사람8</button></div>
-					<div class="btn_person_child"><button id="9" onclick="button_temp(id)">사람9</button></div>
-					<div class="btn_person_child"><button id="10" onclick="button_temp(id)">사람10</button></div> -->
 				</div>
 			</th>
 
@@ -108,63 +98,13 @@
 	</div>
 
 	<script>
+		// ======================================================변수들======================================================//
 		var checked;
 		var checked_button;
 		var checked_id;
 		var data_get = "";
-
-		function blank(){
-
-		}
-
-		function button_click(id) {
-			checked_button = document.getElementById(id);
-			checked = checked_button.checked;
-			checked_id = checked_button.id;
-			console.log(checked);
-
-			if (checked == true) {
-				console.log(data_get);
-
-				while (data_get != "on") {
-					$.ajax({
-						url: 'http://localhost:5000/polling',
-						data: [],
-						type: 'GET',
-						async: false,
-						dataType: 'json',
-					})
-						.done(function (res) {
-							console.log(res);
-
-							data_get = res.polling;
-							console.log(data_get);
-
-							checked_button.checked = false;
-						})
-
-					setTimeout(blank(),1000);
-				}
-
-				if (data_get == "on") {
-					myHorizontalBar.data.datasets[Number(checked_id) - 1].data[0]++;
-					myHorizontalBar.update();
-
-					data_get = "off";
-					checked_button.checked = false;
-				}
-			}
-			//console.log(id);
-		}
-
-		// function button_temp(id) {
-		// 	myHorizontalBar.data.datasets[Number(id) - 6].data[0]--;
-		// 	myHorizontalBar.update();
-		// }
-
-		function reload_click() {
-			window.location.reload(true);
-		}
+		var Interval;
+		var isActive = false;
 
 		var color = Chart.helpers.color;
 		var horizontalBarChartData = {
@@ -202,9 +142,114 @@
 					data: [0]
 				},
 			]
-
 		};
 
+		// ==========================================================함수들======================================================//
+		// 정수기 버튼의 상태를 받아줌
+		function get_btn_status() {
+			$.ajax({
+				url: 'http://localhost:5000/polling',
+				data: [],
+				type: 'GET',
+				async: false,
+				dataType: 'json',
+			})
+				.done(function (res) {
+					//console.log(res);
+
+					data_get = res.polling;
+					//console.log(data_get);
+				})
+		}
+
+		// 정수기 상태를 받아오다가 버튼이 눌렸음을 알게 되었을 때
+		function get_btn_status_apply() {
+			$.ajax({
+				url: 'http://localhost:5000/polling',
+				data: [],
+				type: 'GET',
+				async: false,
+				dataType: 'json',
+			})
+				.done(function (res) {
+					//console.log(res);
+
+					data_get = res.polling;
+					//console.log(data_get);
+
+					if (data_get == "on") {
+						clearInterval(Interval);
+
+						button_on();
+					}
+					else{
+						checked_button.checked=true;
+					}
+				})
+		}
+
+		// 정수기 버튼이 눌렸을 경우의 행동
+		function button_on() {
+			//console.log(data_get + "2");
+
+			isActive=false;
+			//console.log(isActive);
+
+			myHorizontalBar.data.datasets[Number(checked_id) - 1].data[0]++;
+			myHorizontalBar.update();
+
+			data_get = "off";
+			checked_button.checked = false;
+		}
+
+		// 차트의 체크박스가 체크가 되었을 때
+		function button_click(id) {
+			// 어느 체크박스도 선택되어있지 않을 때
+			if (isActive == false) {
+				//console.log(isActive);
+				isActive = true;
+
+				checked_button = document.getElementById(id);
+				checked = checked_button.checked;
+				checked_id = checked_button.id;
+				//console.log(checked);
+
+				// 해당 체크박스의 상태가 체크된 상태일 때 
+				if (checked == true) {
+					//console.log(data_get);
+
+					get_btn_status();
+
+					// 받아온 정수기 버튼의 상태가 눌리지 않은 상태일때
+					if (data_get == "off") {
+						//console.log(data_get + "1");
+						Interval = setInterval(function () {
+							get_btn_status_apply();
+						}, 1000);
+					}
+					
+					// 받아온 정수기 버튼의 상태가 눌린 상태일 때
+					else if (data_get == "on") {
+						button_on();
+					}
+				}
+			}
+			
+			// 하나의 체크박스가 선택되어있을 때(다른 체크박스는 선택해도 반응없도록)
+			else {
+				checked_button.checked=false;
+				//console.log(isActive);
+				console.log("지금 눌려있다고 된 버튼 ID"+checked_id);
+			}
+			//console.log(id);
+		}
+
+		// 새로고침
+		function reload_click() {
+			window.location.reload(true);
+		}
+
+		// =================================================== 페이지 로드 시 상위 기본설정 다 완료하고 마지막에 실행 ===============================//
 		window.onload = function () {
 			var ctx = document.getElementById('canvas').getContext('2d');
 			window.myHorizontalBar = new Chart(ctx, {
