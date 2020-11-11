@@ -19,14 +19,14 @@
 		.btn_person_child {
 			font-size: 5px;
             height:25px;
-            width:100px;
-            margin:5px auto;
+            width:50px;
+            margin:5px 5px;
 		}
 
 		.btn_person {
             margin-top:170px;
 			height: 300px;
-			width: 150px;
+			width: 80px;
 			display: flex;
 			flex-direction: column;
 			/* flex-wrap: wrap; */
@@ -56,9 +56,9 @@
 </head>
 
 <body>
-	<div id="container" style="height:280px;">
-		<table style="height:100%">
-			<th style="height:100%">
+	<div id="container">
+		<table style="width:780px">
+			<th >
 				<div class="btn_person">
 					<div><button class="btn_person_child" id="1" onclick="button_click(id)">사자</button></div>
 					<div><button class="btn_person_child" id="2" onclick="button_click(id)">호랑이</button></div>
@@ -68,8 +68,8 @@
 				</div>
 			</th>
 
-			<th style="width:85%;">
-				<canvas id="canvas"></canvas>
+			<th >
+				<canvas id="canvas" style="width:100%"></canvas>
 			</th>
 		</table>
 	</div>
